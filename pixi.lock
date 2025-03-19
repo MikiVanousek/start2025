@@ -258,7 +258,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/python-dateutil-2.9.0.post0-pyhff2d567_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/python_abi-3.10-5_cp310.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/pytorch-2.6.0-cuda126_mkl_py310_he46af8b_302.conda
-      - conda: https://conda.anaconda.org/conda-forge/win-64/pytorch-gpu-2.6.0-cuda126_mkl_h94247af_302.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/pywin32-307-py310h9e98ed7_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/pyzmq-26.3.0-py310h656833d_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/setuptools-75.8.2-pyhff2d567_0.conda
@@ -2379,15 +2378,6 @@ packages:
   license_family: BSD
   size: 22712807
   timestamp: 1741978382985
-- conda: https://conda.anaconda.org/conda-forge/win-64/pytorch-gpu-2.6.0-cuda126_mkl_h94247af_302.conda
-  sha256: 0cabadc7a9366aaf4be2f9930bbb5630d1d03eb3ab4f04f841f50afd06c3dcec
-  md5: 70576684f86c2e32263c54e176ee4f7e
-  depends:
-  - pytorch 2.6.0 cuda*_mkl*302
-  license: BSD-3-Clause
-  license_family: BSD
-  size: 48894
-  timestamp: 1741984005647
 - conda: https://conda.anaconda.org/conda-forge/win-64/pywin32-307-py310h9e98ed7_3.conda
   sha256: 712a131fadba8236830fc33d04154865a611e489f595b96370ade21cc2c1a5a2
   md5: 1fd1de4af8c39bb0efa5c9d5b092aa42

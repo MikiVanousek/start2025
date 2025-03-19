@@ -17,5 +17,4 @@ ipywidgets = ">=8.1.5,<9"
 pytorch = "*"
 
 [target.win-64.dependencies]
-pytorch-gpu = ">=2.6.0,<3"
 [target.osx-arm64.dependencies]
