@@ -1,0 +1,7 @@
+echo 'import findspark' > session.py \
+            && echo 'findspark.init()' >> session.py \
+            && echo 'from pyspark.sql import SparkSession' >> session.py \
+            && echo 'spark = SparkSession.builder.appName("resolve-delta-sharing-spark").config("spark.sql.extensions
+", "io.delta.sql.DeltaSparkSessionExtension").config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.c
+atalog.DeltaCatalog").config("spark.jars.packages", "io.delta:delta-sharing-spark_2.12:3.3.0").getOrCreate()' >> /hom
+e/jovyan/session.py \
