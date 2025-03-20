@@ -2,3 +2,16 @@
 # pixi environments
 .pixi
 *.egg-info
+*.js
+*.css
+*.html
+*.map
+*.json
+assets/
+vendors/
+dashboard/
+app/
+modules/
+
+# Except for the following files
+!main.html

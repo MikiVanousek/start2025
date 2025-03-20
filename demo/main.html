@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <!-- ===============================================-->
+  <!--    Document Title-->
+  <!-- ===============================================-->
+  <title>Hedge on HVAC Consumption</title>
+
+
+  <!-- ===============================================-->
+  <!--    Favicons-->
+  <!-- ===============================================-->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicons/favicon-16x16.png">
+  <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicons/favicon.ico">
+  <link rel="manifest" href="assets/img/favicons/manifest.json">
+  <meta name="msapplication-TileImage" content="assets/img/favicons/mstile-150x150.png">
+  <meta name="theme-color" content="#ffffff">
+  <script src="assets/js/config.js"></script>
+  <script src="vendors/overlayscrollbars/OverlayScrollbars.min.js"></script>
+
+  <!-- ===============================================-->
+  <!--    Stylesheets-->
+  <!-- ===============================================-->
+
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap"
+    rel="stylesheet">
+  <link href="vendors/overlayscrollbars/OverlayScrollbars.min.css" rel="stylesheet">
+  <link href="assets/css/theme-rtl.min.css" rel="stylesheet" id="style-rtl">
+  <link href="assets/css/theme.min.css" rel="stylesheet" id="style-default">
+  <link href="assets/css/user-rtl.min.css" rel="stylesheet" id="user-style-rtl">
+  <link href="assets/css/user.min.css" rel="stylesheet" id="user-style-default">
+  <script>
+    var isRTL = JSON.parse(localStorage.getItem('isRTL'));
+    if (isRTL) {
+      var linkDefault = document.getElementById('style-default');
+      var userLinkDefault = document.getElementById('user-style-default');
+      linkDefault.setAttribute('disabled', true);
+      userLinkDefault.setAttribute('disabled', true);
+      document.querySelector('html').setAttribute('dir', 'rtl');
+    } else {
+      var linkRTL = document.getElementById('style-rtl');
+      var userLinkRTL = document.getElementById('user-style-rtl');
+      linkRTL.setAttribute('disabled', true);
+      userLinkRTL.setAttribute('disabled', true);
+    }
+  </script>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#terms-sidebar" data-bs-offset="100" tabindex="0">
+  <main class="main" id="top">
+    <nav class="navbar navbar-expand-lg bg-dark fixed-top navbar-dark light dark__bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="">
+          <span class="text-white dark__text-white">Hedge on HVAC Usage</span>
+        </a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarStandard" aria-controls="navbarStandard" aria-expanded="false"
+          aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse scrollbar" id="navbarStandard">
+          <ul class="navbar-nav fw-bold" data-top-nav-dropdowns="data-top-nav-dropdowns">
+            <li class="nav-item dropdown">
+              <a class="nav-link fs-0" href="" asp-fragment="top" role="button" id="nav-home">Market</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link fs-0" href="" asp-fragment="top" role="button" id="nav-firstYear">Create an
+                Instrument</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="container pb-4 pt-7">
+      <div class="card mb-3">
+        <div class="card-body position-relative">
+          <div class="row">
+            <h1 class="fs-3 mb-5">Market</h1>
+            <div class="col-6">
+              <div class="mb-3">
+                <input type="text" id="cityInput" class="form-control" placeholder="Enter a city or country..." value=""
+                  onkeydown="if(event.key==='Enter') searchLocation()">
+                <div class="mt-4 d-none" id="title-news">
+                <h6>Recent News on Real Estate in New York</h6>
+                <span id="typed-placeholder" class="text-muted d-block mt-3" style="display: none;"></span>
+              </div>
+              </div>
+                <div class="align-items-center  d-none" id="market-graph">
+                  <h5>Live average HVAC Consumption in New York</h5>
+                  <div class="echart-dynamic-line-chart-example mx-auto" style="min-height: 300px; max-width: 800px;"
+                    data-echart-responsive="true"></div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div id="map" style="width: 100%; height: 600px; border-radius: 10px;"></div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      <div class="card mb-3 d-none" id="market-card">
+        <div class="card-body">
+          <!-- Time Range Tabs -->
+          <ul class="nav nav-pills mb-4 justify-content-center" id="timeRangeTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="tab-1m" data-bs-toggle="pill" data-bs-target="#tab-pane-1m"
+                type="button" role="tab" aria-controls="tab-pane-1m" aria-selected="true">
+                1M
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tab-3m" data-bs-toggle="pill" data-bs-target="#tab-pane-3m" type="button"
+                role="tab" aria-controls="tab-pane-3m" aria-selected="false">
+                3M
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tab-6m" data-bs-toggle="pill" data-bs-target="#tab-pane-6m" type="button"
+                role="tab" aria-controls="tab-pane-6m" aria-selected="false">
+                6M
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tab-1y" data-bs-toggle="pill" data-bs-target="#tab-pane-1y" type="button"
+                role="tab" aria-controls="tab-pane-1y" aria-selected="false">
+                1Y
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tab-2y" data-bs-toggle="pill" data-bs-target="#tab-pane-2y" type="button"
+                role="tab" aria-controls="tab-pane-2y" aria-selected="false">
+                2Y
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tab-5y" data-bs-toggle="pill" data-bs-target="#tab-pane-5y" type="button"
+                role="tab" aria-controls="tab-pane-5y" aria-selected="false">
+                5Y
+              </button>
+            </li>
+          </ul>
+
+          <!-- Tab Content -->
+          <div class="tab-content" id="timeRangeTabsContent">
+            <!-- 1M Tab Pane -->
+            <div class="tab-pane fade show active" id="tab-pane-1m" role="tabpanel" aria-labelledby="tab-1m">
+              <!-- Header row (column titles) -->
+              <div class="row fw-bold mb-2 ">
+                <div class="col-1"></div>
+                <div class="col-2">Description</div>
+                <div class="col-2">Products</div>
+                <div class="col-2 text-center">Price</div>
+                <div class="col-2 text-center">Amount</div>
+                <div class="col-2  text-center">Short / Long</div>
+                <div class="col-1"></div>
+              </div>
+
+              <!-- Example Row 1 -->
+              <div class="row align-items-center mb-3">
+                <div class="col-1"></div>
+                <div class="col-2">AC Manufacturer</div>
+                <div class="col-2">
+                  <div class="echart-opt1 w-100" style="height: 8rem;" data-echart-responsive="true"></div>
+                </div>
+                <div class="col-2  text-center"><span class="badge badge-soft-danger rounded-pill ms-3 me-3">-0.23%</span><span class="fw-bold">$1,200</span></div>
+                <div class="col-2  text-center"><input type="number" class="form-control form-control-sm" value="100"></div>
+                <div class="col-2  text-center">
+                  <button class="btn btn-sm btn-outline-danger me-1">Short</button>
+                  <button class="btn btn-sm btn-outline-success">Long</button>
+                </div>
+                <div class="col-1"></div>
+              </div>
+
+              <!-- Example Row 2 -->
+              <div class="row align-items-center mb-3">
+                <div class="col-1"></div>
+                <div class="col-2">Water Supplier</div>
+                <div class="col-2">
+                  <div class="echart-opt2 w-100" style="height: 8rem;" data-echart-responsive="true"></div>
+                </div>
+                <div class="col-2  text-center"><span class="badge badge-soft-success rounded-pill ms-3 me-3">+0.4%</span><span class="fw-bold">$980</span></div>
+                <div class="col-2  text-center"><input type="number" class="form-control form-control-sm" value="100"></div>
+                <div class="col-2  text-center">
+                  <button class="btn btn-sm btn-outline-danger me-1">Short</button>
+                  <button class="btn btn-sm btn-outline-success">Long</button>
+                </div>
+                <div class="col-1"></div>
+              </div>
+
+              <!-- Repeat more rows as needed -->
+            </div>
+
+            <!-- 3M Tab Pane -->
+            <div class="tab-pane fade" id="tab-pane-3m" role="tabpanel" aria-labelledby="tab-3m">
+              <!-- Similar structure or dynamic data -->
+              <p>3M data or charts here...</p>
+            </div>
+
+            <!-- 6M Tab Pane -->
+            <div class="tab-pane fade" id="tab-pane-6m" role="tabpanel" aria-labelledby="tab-6m">
+              <p>6M data or charts here...</p>
+            </div>
+
+            <!-- 1Y Tab Pane -->
+            <div class="tab-pane fade" id="tab-pane-1y" role="tabpanel" aria-labelledby="tab-1y">
+              <p>1Y data or charts here...</p>
+            </div>
+
+            <!-- 2Y Tab Pane -->
+            <div class="tab-pane fade" id="tab-pane-2y" role="tabpanel" aria-labelledby="tab-2y">
+              <p>2Y data or charts here...</p>
+            </div>
+
+            <!-- 5Y Tab Pane -->
+            <div class="tab-pane fade" id="tab-pane-5y" role="tabpanel" aria-labelledby="tab-5y">
+              <p>5Y data or charts here...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+
+</body>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+
+
+<script>
+  // Initialize the map
+  const map = L.map('map').setView([20, 0], 2);
+
+  // Load a minimalist tile layer
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 20
+  }).addTo(map);
+
+  let highlightLayer;
+
+  function searchLocation() {
+    const locationName = document.getElementById("cityInput").value;
+    if (!locationName) return;
+
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=${locationName}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.length > 0) {
+          const { lat, lon, geojson, boundingbox } = data[0];
+
+          const bbox = [
+            [parseFloat(boundingbox[0]), parseFloat(boundingbox[2])],
+            [parseFloat(boundingbox[1]), parseFloat(boundingbox[3])]
+          ];
+
+          map.fitBounds(bbox, { padding: [50, 50] });
+
+          if (highlightLayer) map.removeLayer(highlightLayer);
+
+          if (geojson) {
+            highlightLayer = L.geoJSON(geojson, {
+              style: {
+                color: "red",
+                weight: 3,
+                fillColor: "red",
+                fillOpacity: 0.5
+              }
+            }).addTo(map);
+          }
+
+          new Typed("#typed-placeholder", {
+            strings: ["New York City’s housing projects are facing controversy. Residents in Sheepshead Bay protested against a 169-family homeless shelter replacing a promised affordable housing project. Meanwhile, Williamsburg will soon have a Japanese-inspired mini-forest to improve air quality and revitalize the neglected waterfront.\n\n <br/>On the infrastructure front, Rep. Ritchie Torres is pushing for a Public-Private Partnership to renovate Penn Station, citing safety concerns. Additionally, tariffs on steel and aluminum are increasing construction costs, impacting major developments. \nAmong notable real estate transactions, Mets star Francisco Lindor is purchasing a $20 million Upper East Side penthouse in a boutique development, set for completion in 2025."],
+            typeSpeed: 1,
+            backSpeed: 30,
+            backDelay: 1500,
+            loop: false
+          });
+
+          var marketCard = document.getElementById("market-card");
+          marketCard.classList.remove("d-none");
+
+          var titleNews = document.getElementById("title-news");
+          titleNews.classList.remove("d-none");
+
+          var chartDom1 = document.querySelector('.echart-opt1');
+          var chartDom2 = document.querySelector('.echart-opt2');
+          var myChart1 = echarts.init(chartDom1);
+          var myChart2 = echarts.init(chartDom2);
+            // Set the chart option
+          myChart1.setOption(option1);
+          myChart2.setOption(option2);
+
+          echartsDynamicLineChartInit();
+        } else {
+          alert("Location not found");
+        }
+      })
+      .catch(error => console.error("Error fetching location:", error));
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
+<script>
+
+  function echartsDynamicLineChartInit() {
+    var $dynamicLineChartEl = document.querySelector('.echart-dynamic-line-chart-example');
+    var $marketGraph = document.getElementById("market-graph");
+    $marketGraph.classList.remove("d-none");
+
+    if ($dynamicLineChartEl) {
+      var chart = echarts.init($dynamicLineChartEl);
+
+      var randomData = function () {
+        now = new Date(+now + oneDay);
+        value = value + Math.random() * 21 - 10;
+        return {
+          name: now.toString(),
+          value: [[now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'), Math.round(value)]
+        };
+      };
+
+      var data = [];
+      var now = +new Date(1997, 9, 3);
+      var oneDay = 24 * 3600 * 1000;
+      var value = Math.random() * 1000;
+
+      for (var i = 0; i < 1000; i++) {
+        data.push(randomData());
+      }
+
+      var chartOptions = {
+        xAxis: {
+          type: 'time',
+          name: 'Date',  // x-axis label added here
+          splitLine: { show: false },
+          nameLocation: 'middle',
+          nameTextStyle: {
+            padding: [7, 0, 0, 0],
+            fontSize: 12
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: 'HVAC Consumption', 
+          boundaryGap: [0, '100%'],
+          splitLine: { show: false },
+          nameTextStyle: {
+            padding: [0, 0, 0, 50],
+            fontSize: 12
+          }
+        },
+        series: [{
+          name: 'Total',
+          type: 'line',
+          showSymbol: false,
+          hoverAnimation: false,
+          data: data,
+          lineStyle: { color: 'blue' },
+          itemStyle: { color: 'blue', borderColor: 'blue', borderWidth: 2 },
+          symbol: 'circle',
+          symbolSize: 6
+        }],
+        grid: {
+          right: 10,
+          left: '0px',
+          top: '35px',
+          bottom: '15px',
+          containLabel: true
+        }
+      };
+
+      chart.setOption(chartOptions);
+
+      setInterval(function () {
+        for (var i = 0; i < 5; i++) {
+          data.shift();
+          data.push(randomData());
+        }
+        chart.setOption({ series: [{ data: data }] });
+      }, 1000);
+    }
+  }
+</script>
+
+<script>
+
+
+  // Define chart options
+  var option1 = {
+    xAxis: {
+      type: 'category',
+      name: 'HVAC Consumption [J]',
+      data: ['50', '100', '150', '200'],
+      nameLocation: 'middle',
+      nameTextStyle: {
+        // The order is [top, right, bottom, left].
+        // Increasing the left padding moves the text to the right.
+        padding: [7, 0, 0, 0],
+        fontSize: 12
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'Refund Amount [$]',
+      // nameLocation: 'middle',    // places the label along the middle of the axis
+      // nameGap: 40,               // vertical gap from the axis line
+      nameTextStyle: {
+        // The order is [top, right, bottom, left].
+        // Increasing the left padding moves the text to the right.
+        padding: [0, 0, 0, 60],
+        fontSize: 12
+      }
+    },
+    series: [{
+      data: [0, 0, 1, 1],
+      type: 'line',
+      smooth: true
+    }],
+    // Minimalist styling: remove grid lines if desired
+    grid: {
+      left: '5px',
+      right: '5px',
+      bottom: '15px',
+      top: '27px',
+      containLabel: true
+    },
+    "color":"#f5803e",
+  };
+
+
+  var option2 = {
+    xAxis: {
+      type: 'category',
+      name: 'HVAC Consumption [J]',
+      data: ['50', '100', '150', '200'],
+      nameLocation: 'middle',
+      nameTextStyle: {
+        // The order is [top, right, bottom, left].
+        // Increasing the left padding moves the text to the right.
+        padding: [7, 0, 0, 0],
+        fontSize: 12
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'Refund Amount [$]',
+      // nameLocation: 'middle',    // places the label along the middle of the axis
+      // nameGap: 40,               // vertical gap from the axis line
+      nameTextStyle: {
+        // The order is [top, right, bottom, left].
+        // Increasing the left padding moves the text to the right.
+        padding: [0, 0, 0, 60],
+        fontSize: 12
+      }
+    },
+    series: [{
+      data: [1, 0.5, 0, 0],
+      type: 'line',
+      smooth: false
+    }],
+    // Minimalist styling: remove grid lines if desired
+    grid: {
+      left: '5px',
+      right: '5px',
+      bottom: '15px',
+      top: '27px',
+      containLabel: true
+    },
+    "color":"#f5803e",
+  };
+
+</script>
+
+</html>
