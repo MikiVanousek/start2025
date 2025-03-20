@@ -91,12 +91,12 @@
                 <input type="text" id="cityInput" class="form-control" placeholder="Enter a city or country..." value=""
                   onkeydown="if(event.key==='Enter') searchLocation()">
                 <div class="mt-4 d-none" id="title-news">
-                <h6>Recent News on Real Estate in New York</h6>
+                <h6>Recent News on Real Estate in <span class="location-input" style="text-transform: capitalize;"></span></h6>
                 <span id="typed-placeholder" class="text-muted d-block mt-3" style="display: none;"></span>
               </div>
               </div>
                 <div class="align-items-center  d-none" id="market-graph">
-                  <h5>Live average HVAC Consumption in New York</h5>
+                  <h5>Live average HVAC Consumption in <span class="location-input" style="text-transform: capitalize;"></span></h5>
                   <div class="echart-dynamic-line-chart-example mx-auto" style="min-height: 300px; max-width: 800px;"
                     data-echart-responsive="true"></div>
               </div>
@@ -158,45 +158,39 @@
             <div class="tab-pane fade show active" id="tab-pane-1m" role="tabpanel" aria-labelledby="tab-1m">
               <!-- Header row (column titles) -->
               <div class="row fw-bold mb-2 ">
-                <div class="col-1"></div>
                 <div class="col-2">Description</div>
-                <div class="col-2">Products</div>
+                <div class="col-4">Products</div>
                 <div class="col-2 text-center">Price</div>
                 <div class="col-2 text-center">Amount</div>
-                <div class="col-2  text-center">Short / Long</div>
-                <div class="col-1"></div>
+                <div class="col-2  text-center">Sell / Buy</div>
               </div>
 
               <!-- Example Row 1 -->
               <div class="row align-items-center mb-3">
-                <div class="col-1"></div>
-                <div class="col-2">AC Manufacturer</div>
-                <div class="col-2">
-                  <div class="echart-opt1 w-100" style="height: 8rem;" data-echart-responsive="true"></div>
+                <div class="col-2">Convention Center Owner</div>
+                <div class="col-4">
+                  <div class="echart-opt1 w-100" style="height: 12rem;" data-echart-responsive="true"></div>
                 </div>
                 <div class="col-2  text-center"><span class="badge badge-soft-danger rounded-pill ms-3 me-3">-0.23%</span><span class="fw-bold">$1,200</span></div>
                 <div class="col-2  text-center"><input type="number" class="form-control form-control-sm" value="100"></div>
                 <div class="col-2  text-center">
-                  <button class="btn btn-sm btn-outline-danger me-1">Short</button>
-                  <button class="btn btn-sm btn-outline-success">Long</button>
+                  <button class="btn btn-sm btn-outline-danger me-1">Sell</button>
+                  <button class="btn btn-sm btn-outline-success">Buy</button>
                 </div>
-                <div class="col-1"></div>
               </div>
 
               <!-- Example Row 2 -->
               <div class="row align-items-center mb-3">
-                <div class="col-1"></div>
-                <div class="col-2">Water Supplier</div>
-                <div class="col-2">
-                  <div class="echart-opt2 w-100" style="height: 8rem;" data-echart-responsive="true"></div>
+                <div class="col-2">AC Manufacturer</div>
+                <div class="col-4">
+                  <div class="echart-opt2 w-100" style="height: 12rem;" data-echart-responsive="true"></div>
                 </div>
                 <div class="col-2  text-center"><span class="badge badge-soft-success rounded-pill ms-3 me-3">+0.4%</span><span class="fw-bold">$980</span></div>
                 <div class="col-2  text-center"><input type="number" class="form-control form-control-sm" value="100"></div>
                 <div class="col-2  text-center">
-                  <button class="btn btn-sm btn-outline-danger me-1">Short</button>
-                  <button class="btn btn-sm btn-outline-success">Long</button>
+                  <button class="btn btn-sm btn-outline-danger me-1">Sell</button>
+                  <button class="btn btn-sm btn-outline-success">Buy</button>
                 </div>
-                <div class="col-1"></div>
               </div>
 
               <!-- Repeat more rows as needed -->
@@ -245,6 +239,12 @@
 <script>
   // Initialize the map
   const map = L.map('map').setView([20, 0], 2);
+  var typedObj;
+  var chart;
+  var myChart1;
+  var myChart2;
+  var chartInterval;
+  var orderOfMagnitude = 'M';
 
   // Load a minimalist tile layer
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
@@ -261,13 +261,43 @@
     fetch(`https://nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=${locationName}`)
       .then(response => response.json())
       .then(data => {
+        try {
+          // Clear typed placeholder
+          typedObj.destroy();
+          typedObj = null;
+
+          chart.clear();
+          chart = null;
+
+          myChart1.clear();
+          myChart2.clear();
+
+        } catch (error) {
+          console.log("Error cleaning charts", error);
+        }
+
         if (data.length > 0) {
+          const locationInput = document.querySelectorAll(".location-input");
+          locationInput.forEach(el => el.textContent = locationName);
+
           const { lat, lon, geojson, boundingbox } = data[0];
 
           const bbox = [
             [parseFloat(boundingbox[0]), parseFloat(boundingbox[2])],
             [parseFloat(boundingbox[1]), parseFloat(boundingbox[3])]
           ];
+
+          var area = (bbox[1][0] - bbox[0][0]) * (bbox[1][1] - bbox[0][1]);
+          console.log("area", area);
+          if (area > 0.2) {
+            orderOfMagnitude = 'G';
+          } else if (area > 0.1) {
+            orderOfMagnitude = 'x100 M';
+          } else if (area > 0.02){
+            orderOfMagnitude = 'x10 M';
+          } else if (area > 0.005){
+            orderOfMagnitude = 'x10 K';
+          }
 
           map.fitBounds(bbox, { padding: [50, 50] });
 
@@ -284,13 +314,15 @@
             }).addTo(map);
           }
 
-          new Typed("#typed-placeholder", {
-            strings: ["New York City’s housing projects are facing controversy. Residents in Sheepshead Bay protested against a 169-family homeless shelter replacing a promised affordable housing project. Meanwhile, Williamsburg will soon have a Japanese-inspired mini-forest to improve air quality and revitalize the neglected waterfront.\n\n <br/>On the infrastructure front, Rep. Ritchie Torres is pushing for a Public-Private Partnership to renovate Penn Station, citing safety concerns. Additionally, tariffs on steel and aluminum are increasing construction costs, impacting major developments. \nAmong notable real estate transactions, Mets star Francisco Lindor is purchasing a $20 million Upper East Side penthouse in a boutique development, set for completion in 2025."],
+          typedObj = new Typed("#typed-placeholder", {
+            strings: [locationName + "’s housing projects are facing controversy. Residents protested against a 169-family homeless shelter replacing a promised affordable housing project. Meanwhile, a designated area will have a Japanese-inspired mini-forest to improve air quality and revitalize the neglected waterfront.\n\n <br/>On the infrastructure front, Rep. Ritchie Torres is pushing for a Public-Private Partnership to renovate the Train Station, citing safety concerns. Additionally, tariffs on steel and aluminum are increasing construction costs, impacting major developments. \nAmong notable real estate transactions, Mets star Francisco Lindor is purchasing a $20 million penthouse in a boutique development, set for completion in 2025."],
             typeSpeed: 1,
             backSpeed: 30,
             backDelay: 1500,
             loop: false
           });
+
+          chartInterval && clearInterval(chartInterval);
 
           var marketCard = document.getElementById("market-card");
           marketCard.classList.remove("d-none");
@@ -300,8 +332,8 @@
 
           var chartDom1 = document.querySelector('.echart-opt1');
           var chartDom2 = document.querySelector('.echart-opt2');
-          var myChart1 = echarts.init(chartDom1);
-          var myChart2 = echarts.init(chartDom2);
+          myChart1 = echarts.init(chartDom1);
+          myChart2 = echarts.init(chartDom2);
             // Set the chart option
           myChart1.setOption(option1);
           myChart2.setOption(option2);
@@ -324,7 +356,7 @@
     $marketGraph.classList.remove("d-none");
 
     if ($dynamicLineChartEl) {
-      var chart = echarts.init($dynamicLineChartEl);
+      chart = echarts.init($dynamicLineChartEl);
 
       var randomData = function () {
         now = new Date(+now + oneDay);
@@ -357,11 +389,11 @@
         },
         yAxis: {
           type: 'value',
-          name: 'HVAC Consumption', 
+          name: 'HVAC Consumption [' + orderOfMagnitude + 'J]', 
           boundaryGap: [0, '100%'],
           splitLine: { show: false },
           nameTextStyle: {
-            padding: [0, 0, 0, 50],
+            padding: [0, 0, 0, 60],
             fontSize: 12
           }
         },
@@ -378,7 +410,7 @@
         }],
         grid: {
           right: 10,
-          left: '0px',
+          left: '13px',
           top: '35px',
           bottom: '15px',
           containLabel: true
@@ -387,7 +419,7 @@
 
       chart.setOption(chartOptions);
 
-      setInterval(function () {
+      chartInterval = setInterval(function () {
         for (var i = 0; i < 5; i++) {
           data.shift();
           data.push(randomData());
@@ -428,9 +460,9 @@
       }
     },
     series: [{
-      data: [0, 0, 1, 1],
+      data: [0, 0, 0.5, 1],
       type: 'line',
-      smooth: true
+      smooth: false
     }],
     // Minimalist styling: remove grid lines if desired
     grid: {
