@@ -111,29 +111,29 @@
       </div>
 
       <div class="card mb-3 d-none" id="market-card">
-        <div class="card-body">
+        <div class="card-body ">
           <!-- Time Range Tabs -->
-          <ul class="nav nav-pills mb-4 justify-content-center" id="timeRangeTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="tab-1m" data-bs-toggle="pill" data-bs-target="#tab-pane-1m"
+          <ul class="nav nav-pills mb-4 justify-content-center bg-200 rounded-2 py-2" id="timeRangeTabs" role="tablist">
+            <li class="nav-item " role="presentation">
+              <button class="nav-link" id="tab-1m" data-bs-toggle="pill" data-bs-target="#tab-pane-1m"
                 type="button" role="tab" aria-controls="tab-pane-1m" aria-selected="true">
                 1M
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item " role="presentation">
               <button class="nav-link" id="tab-3m" data-bs-toggle="pill" data-bs-target="#tab-pane-3m" type="button"
                 role="tab" aria-controls="tab-pane-3m" aria-selected="false">
                 3M
               </button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item " role="presentation">
               <button class="nav-link" id="tab-6m" data-bs-toggle="pill" data-bs-target="#tab-pane-6m" type="button"
                 role="tab" aria-controls="tab-pane-6m" aria-selected="false">
                 6M
               </button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="tab-1y" data-bs-toggle="pill" data-bs-target="#tab-pane-1y" type="button"
+              <button class="nav-link active" id="tab-1y" data-bs-toggle="pill" data-bs-target="#tab-pane-1y" type="button"
                 role="tab" aria-controls="tab-pane-1y" aria-selected="false">
                 1Y
               </button>
@@ -158,7 +158,7 @@
             <div class="tab-pane fade show active" id="tab-pane-1m" role="tabpanel" aria-labelledby="tab-1m">
               <!-- Header row (column titles) -->
               <div class="row fw-bold mb-2 ">
-                <div class="col-2">Description</div>
+                <div class="col-2"></div>
                 <div class="col-4">Products</div>
                 <div class="col-2 text-center">Price</div>
                 <div class="col-2 text-center">Amount</div>
@@ -167,11 +167,11 @@
 
               <!-- Example Row 1 -->
               <div class="row align-items-center mb-3">
-                <div class="col-2">Convention Center Owner</div>
+                <div class="col-2 fw-bold">Convention Center Owner</div>
                 <div class="col-4">
                   <div class="echart-opt1 w-100" style="height: 12rem;" data-echart-responsive="true"></div>
                 </div>
-                <div class="col-2  text-center"><span class="badge badge-soft-danger rounded-pill ms-3 me-3">-0.23%</span><span class="fw-bold">$1,200</span></div>
+                <div class="col-2  text-center"><span class="badge badge-soft-danger rounded-pill ms-3 me-3">-0.23%</span><span class="fw-bold">$130</span></div>
                 <div class="col-2  text-center"><input type="number" class="form-control form-control-sm" value="100"></div>
                 <div class="col-2  text-center">
                   <button class="btn btn-sm btn-outline-danger me-1">Sell</button>
@@ -181,11 +181,25 @@
 
               <!-- Example Row 2 -->
               <div class="row align-items-center mb-3">
-                <div class="col-2">AC Manufacturer</div>
+                <div class="col-2 fw-bold">AC Manufacturer</div>
                 <div class="col-4">
                   <div class="echart-opt2 w-100" style="height: 12rem;" data-echart-responsive="true"></div>
                 </div>
-                <div class="col-2  text-center"><span class="badge badge-soft-success rounded-pill ms-3 me-3">+0.4%</span><span class="fw-bold">$980</span></div>
+                <div class="col-2  text-center"><span class="badge badge-soft-success rounded-pill ms-3 me-3">+0.4%</span><span class="fw-bold">$90</span></div>
+                <div class="col-2  text-center"><input type="number" class="form-control form-control-sm" value="100"></div>
+                <div class="col-2  text-center">
+                  <button class="btn btn-sm btn-outline-danger me-1">Sell</button>
+                  <button class="btn btn-sm btn-outline-success">Buy</button>
+                </div>
+              </div>
+
+               <!-- Example Row 2 -->
+               <div class="row align-items-center mb-3">
+                <div class="col-2 fw-bold">Electric Utility Company</div>
+                <div class="col-4">
+                  <div class="echart-opt3 w-100" style="height: 12rem;" data-echart-responsive="true"></div>
+                </div>
+                <div class="col-2  text-center"><span class="badge badge-soft-success rounded-pill ms-3 me-3">+1.2%</span><span class="fw-bold">$210</span></div>
                 <div class="col-2  text-center"><input type="number" class="form-control form-control-sm" value="100"></div>
                 <div class="col-2  text-center">
                   <button class="btn btn-sm btn-outline-danger me-1">Sell</button>
@@ -194,6 +208,10 @@
               </div>
 
               <!-- Repeat more rows as needed -->
+            </div>
+
+            <div class="text-center mt-4 mb-2">
+              <button class="btn btn-outline-primary">See more</button>
             </div>
 
             <!-- 3M Tab Pane -->
@@ -243,6 +261,7 @@
   var chart;
   var myChart1;
   var myChart2;
+  var myChart3;
   var chartInterval;
   var orderOfMagnitude = 'M';
 
@@ -255,7 +274,7 @@
   let highlightLayer;
 
   function searchLocation() {
-    const locationName = document.getElementById("cityInput").value;
+    locationName = document.getElementById("cityInput").value;
     if (!locationName) return;
 
     fetch(`https://nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=${locationName}`)
@@ -271,6 +290,7 @@
 
           myChart1.clear();
           myChart2.clear();
+          myChart3.clear();
 
         } catch (error) {
           console.log("Error cleaning charts", error);
@@ -314,8 +334,11 @@
             }).addTo(map);
           }
 
+          // Capitalize all words of location name
+          locationName = locationName.replace(/\b\w/g, l => l.toUpperCase());
+
           typedObj = new Typed("#typed-placeholder", {
-            strings: [locationName + "’s housing projects are facing controversy. Residents protested against a 169-family homeless shelter replacing a promised affordable housing project. Meanwhile, a designated area will have a Japanese-inspired mini-forest to improve air quality and revitalize the neglected waterfront.\n\n <br/>On the infrastructure front, Rep. Ritchie Torres is pushing for a Public-Private Partnership to renovate the Train Station, citing safety concerns. Additionally, tariffs on steel and aluminum are increasing construction costs, impacting major developments. \nAmong notable real estate transactions, Mets star Francisco Lindor is purchasing a $20 million penthouse in a boutique development, set for completion in 2025."],
+            strings: [locationName + "’s housing projects are facing controversy. Residents protested against a 169-family homeless shelter replacing a promised affordable housing project. Meanwhile, a designated area will have a Japanese-inspired mini-forest to improve air quality and revitalize the neglected waterfront.\n\n <br/>On the infrastructure front, Rep. Ritchie Torres is pushing for a Public-Private Partnership to renovate the Train Station, citing safety concerns. Additionally, tariffs on steel and aluminum are increasing construction costs, impacting major developments."],
             typeSpeed: 1,
             backSpeed: 30,
             backDelay: 1500,
@@ -332,11 +355,14 @@
 
           var chartDom1 = document.querySelector('.echart-opt1');
           var chartDom2 = document.querySelector('.echart-opt2');
+          var chartDom3 = document.querySelector('.echart-opt3');
           myChart1 = echarts.init(chartDom1);
           myChart2 = echarts.init(chartDom2);
+          myChart3 = echarts.init(chartDom3);
             // Set the chart option
           myChart1.setOption(option1);
           myChart2.setOption(option2);
+          myChart3.setOption(option3);
 
           echartsDynamicLineChartInit();
         } else {
@@ -389,7 +415,7 @@
         },
         yAxis: {
           type: 'value',
-          name: 'HVAC Consumption [' + orderOfMagnitude + 'J]', 
+          name: 'HVAC Consumption [' + orderOfMagnitude + 'W]', 
           boundaryGap: [0, '100%'],
           splitLine: { show: false },
           nameTextStyle: {
@@ -437,7 +463,7 @@
   var option1 = {
     xAxis: {
       type: 'category',
-      name: 'HVAC Consumption [J]',
+      name: 'HVAC Consumption [J/Device]',
       data: ['50', '100', '150', '200'],
       nameLocation: 'middle',
       nameTextStyle: {
@@ -460,7 +486,7 @@
       }
     },
     series: [{
-      data: [0, 0, 0.5, 1],
+      data: [0, 0, 500, 1000],
       type: 'line',
       smooth: false
     }],
@@ -479,7 +505,7 @@
   var option2 = {
     xAxis: {
       type: 'category',
-      name: 'HVAC Consumption [J]',
+      name: 'HVAC Consumption [J/Device]',
       data: ['50', '100', '150', '200'],
       nameLocation: 'middle',
       nameTextStyle: {
@@ -502,7 +528,48 @@
       }
     },
     series: [{
-      data: [1, 0.5, 0, 0],
+      data: [1000, 500, 0, 0],
+      type: 'line',
+      smooth: false
+    }],
+    // Minimalist styling: remove grid lines if desired
+    grid: {
+      left: '5px',
+      right: '5px',
+      bottom: '15px',
+      top: '27px',
+      containLabel: true
+    },
+    "color":"#f5803e",
+  };
+
+  var option3 = {
+    xAxis: {
+      type: 'category',
+      name: 'HVAC Consumption [J/Device]',
+      data: ['0', '50', '100', '150', '200'],
+      nameLocation: 'middle',
+      nameTextStyle: {
+        // The order is [top, right, bottom, left].
+        // Increasing the left padding moves the text to the right.
+        padding: [7, 0, 0, 0],
+        fontSize: 12
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'Refund Amount [$]',
+      // nameLocation: 'middle',    // places the label along the middle of the axis
+      // nameGap: 40,               // vertical gap from the axis line
+      nameTextStyle: {
+        // The order is [top, right, bottom, left].
+        // Increasing the left padding moves the text to the right.
+        padding: [0, 0, 0, 60],
+        fontSize: 12
+      }
+    },
+    series: [{
+      data: [1000, 500, 0, 500, 1000],
       type: 'line',
       smooth: false
     }],
