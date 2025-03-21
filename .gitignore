@@ -12,7 +12,7 @@ vendors/
 dashboard/
 app/
 modules/
-config.share
+*.share
 
 
 # Except for the following files
