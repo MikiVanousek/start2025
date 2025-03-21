@@ -31,7 +31,7 @@ We propose a data-driven financial model that transforms Belimo’s HVAC sensor 
 
 3. Risk Payouts: If predefined conditions (e.g., excessive cooling costs) are met, businesses receive payouts to offset increased energy expenditures.
 
-4. Monetization: Belimo earns a commission for each data-backed financial contract executed through the trading platform. Either Belimo constructs it's own trading platform, either it sells its oracle data to a company specialized in matching clients for derivatives contracts. An example of such a platform is given in `demo/main.html` (see below).
+4. Monetization: Belimo earns a commission for each data-backed financial contract executed through the trading platform. Either Belimo constructs it's own trading platform, either it sells its oracle data to a company specialized in matching clients for derivatives contracts. An example of such a platform is given in `demo/main.html` (see below an example with illustrative data).
 
 ![App Example](imgs/app.jpeg)
 
