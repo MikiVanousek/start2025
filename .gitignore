@@ -12,6 +12,8 @@ vendors/
 dashboard/
 app/
 modules/
+config.share
+
 
 # Except for the following files
 !main.html
