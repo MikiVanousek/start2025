@@ -45,8 +45,12 @@ The global market for weather derivatives is valued at [$25 billion annually](ht
 Belimo has long been a leader in optimizing HVAC energy efficiency. This project represents the next step in monetizing real-time sensor data, transforming it into a valuable financial instrument. By bridging the gap between IoT-driven energy insights and financial risk management, we are redefining how businesses protect themselves against climate uncertainty.
 
 ## Contributions
+Team **Overclocked Neurons**
 
-Sebastian Maier*, Sébastien Delsad*, Mikulas Vanousek*, Kamel Charaf*
+- Sebastian Maier*
+- Sébastien Delsad*
+- Mikulas Vanousek*
+- Kamel Charaf*
 
 **START Hackathon 2025**
 
